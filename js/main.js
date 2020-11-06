@@ -64,13 +64,13 @@ const OFFERS_AMOUNT = 8;
 const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
 
-const pinList = document.querySelector(`.map__pins`);
+// const pinList = document.querySelector(`.map__pins`);
 const pinTamplate = document
   .querySelector(`#pin`)
   .content.querySelector(`.map__pin`);
-const cardTemplate = document
-  .querySelector(`#card`)
-  .content.querySelector(`.map__card`);
+// const cardTemplate = document
+//   .querySelector(`#card`)
+//   .content.querySelector(`.map__card`);
 
 // Случайное число
 const getRandomNumber = function (min, max) {
@@ -106,111 +106,111 @@ const renderPin = function (offerOfNearby) {
   return pinElement;
 };
 
-const correcttWord = function (number, one, two, many) {
-  let n = Math.abs(number) % 100;// Проверка по модулю
-  if (n > 4) {
-    return many;
-  }
+// const correcttWord = function (number, one, two, many) {
+//   let n = Math.abs(number) % 100;// Проверка по модулю
+//   if (n > 4) {
+//     return many;
+//   }
 
-  n %= 10;
+//   n %= 10;
 
-  if (n === 1) {
-    return one;
-  }
+//   if (n === 1) {
+//     return one;
+//   }
 
-  if (n > 1 && n < 5) {
-    return two;
-  }
+//   if (n > 1 && n < 5) {
+//     return two;
+//   }
 
-  return many;
-};
+//   return many;
+// };
 
 // Создаёт DOM-элементы Card
-const renderCard = function (offerOfNearby) {
-  let cardElement = cardTemplate.cloneNode(true);
+// const renderCard = function (offerOfNearby) {
+//   let cardElement = cardTemplate.cloneNode(true);
 
-  cardElement.querySelector(`.popup__title`).textContent =
-    offerOfNearby.offer.title;
-  cardElement.querySelector(`.popup__text--address`).textContent =
-    offerOfNearby.offer.address;
-  cardElement.querySelector(
-      `.popup__text--price`
-  ).textContent = `${offerOfNearby.offer.price}₽/ночь`;
-  cardElement.querySelector(`.popup__type`).textContent =
-    OFFER_TYPE[offerOfNearby.offer.type];
+//   cardElement.querySelector(`.popup__title`).textContent =
+//     offerOfNearby.offer.title;
+//   cardElement.querySelector(`.popup__text--address`).textContent =
+//     offerOfNearby.offer.address;
+//   cardElement.querySelector(
+//       `.popup__text--price`
+//   ).textContent = `${offerOfNearby.offer.price}₽/ночь`;
+//   cardElement.querySelector(`.popup__type`).textContent =
+//     OFFER_TYPE[offerOfNearby.offer.type];
 
-  // Меняет окончания слов в зависимости от числа
-  const room = offerOfNearby.offer.rooms;
-  const guest = offerOfNearby.offer.guests;
+//   // Меняет окончания слов в зависимости от числа
+//   const room = offerOfNearby.offer.rooms;
+//   const guest = offerOfNearby.offer.guests;
 
-  const choosePhrase = `${room} ${correcttWord(room, `комната`, `комнаты`, `комнат`)} для ${guest} ${correcttWord(guest, `гостя`, `гостей`, `гостей`)}`;
-  cardElement.querySelector(`.popup__text--capacity`).textContent = choosePhrase;
-  cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${offerOfNearby.offer.checkin}, выезд до ${offerOfNearby.offer.checkout}`;
-  cardElement.querySelector(`.popup__description`).textContent = offerOfNearby.offer.description;
-  cardElement.querySelector(`.popup__avatar`).src = offerOfNearby.author.avatar;
+//   const choosePhrase = `${room} ${correcttWord(room, `комната`, `комнаты`, `комнат`)} для ${guest} ${correcttWord(guest, `гостя`, `гостей`, `гостей`)}`;
+//   cardElement.querySelector(`.popup__text--capacity`).textContent = choosePhrase;
+//   cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${offerOfNearby.offer.checkin}, выезд до ${offerOfNearby.offer.checkout}`;
+//   cardElement.querySelector(`.popup__description`).textContent = offerOfNearby.offer.description;
+//   cardElement.querySelector(`.popup__avatar`).src = offerOfNearby.author.avatar;
 
-  // Нахдит и очищает список ul
-  let cardFeatures = cardTemplate.querySelector(`.popup__features`);
-  cardFeatures.innerHTML = ``;
+//   // Нахдит и очищает список ul
+//   let cardFeatures = cardTemplate.querySelector(`.popup__features`);
+//   cardFeatures.innerHTML = ``;
 
-  // Создаёт элементы списка и заполняет список
-  for (let j = 0; j < offerOfNearby.offer.features.length; j++) {
+//   // Создаёт элементы списка и заполняет список
+//   for (let j = 0; j < offerOfNearby.offer.features.length; j++) {
 
-    let newFeature = document.createElement(`li`);
-    newFeature.classList.add(
-        `popup__feature`,
-        `popup__feature--${offerOfNearby.offer.features[j]}`
-    );
-    cardFeatures.appendChild(newFeature);
-  }
+//     let newFeature = document.createElement(`li`);
+//     newFeature.classList.add(
+//         `popup__feature`,
+//         `popup__feature--${offerOfNearby.offer.features[j]}`
+//     );
+//     cardFeatures.appendChild(newFeature);
+//   }
 
-  // Нахдит oчищает div
-  const cardPhotos = cardElement.querySelector(`.popup__photos`);
-  cardPhotos.innerHTML = ``;
+//   // Нахдит oчищает div
+//   const cardPhotos = cardElement.querySelector(`.popup__photos`);
+//   cardPhotos.innerHTML = ``;
 
-  // Создаёт элементы img и заполняет src из массива
-  for (let j = 0; j < offerOfNearby.offer.photos.length; j++) {
-    let newPhotos = document.createElement(`img`);
-    newPhotos.classList.add(`popup__photo`);
-    newPhotos.setAttribute(`src`, offerOfNearby.offer.photos[j]);
-    newPhotos.setAttribute(`alt`, `Фотография жилья`);
-    newPhotos.setAttribute(`width`, `45`);
-    newPhotos.setAttribute(`height`, `40`);
-    cardPhotos.appendChild(newPhotos);
-  }
-  return cardElement;
-};
+//   // Создаёт элементы img и заполняет src из массива
+//   for (let j = 0; j < offerOfNearby.offer.photos.length; j++) {
+//     let newPhotos = document.createElement(`img`);
+//     newPhotos.classList.add(`popup__photo`);
+//     newPhotos.setAttribute(`src`, offerOfNearby.offer.photos[j]);
+//     newPhotos.setAttribute(`alt`, `Фотография жилья`);
+//     newPhotos.setAttribute(`width`, `45`);
+//     newPhotos.setAttribute(`height`, `40`);
+//     cardPhotos.appendChild(newPhotos);
+//   }
+//   return cardElement;
+// };
 
-// // Генерирует объекты
-// const fragment = document.createDocumentFragment();
-// const cardList = [];
-// for (let i = 1; i <= OFFERS_AMOUNT; i++) {
-//   const offerOfNearby = {
-//     author: {
-//       avatar: `img/avatars/user0${i}.png`,
-//     },
-//     offer: {
-//       title: getRandomElement(OFFER_TITLE),
-//       address: getRandomElement(OFFER_ADDRESS),
-//       price: getRandomNumber(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
-//       type: getRandomElement(OFFER_TYPE),
-//       rooms: getRandomNumber(1, OFFER_ROOMS.length),
-//       guests: getRandomNumber(1, OFFER_GUESTS.length),
-//       checkin: getRandomElement(OFFER_CHECKIN),
-//       checkout: getRandomElement(OFFER_CHECKOUT),
-//       features: getRandomArray(OFFER_FEATURES),
-//       description: getRandomElement(OFFER_DESCRIPTION),
-//       photos: getRandomArray(OFFER_PHOTOS),
-//     },
-//     location: {
-//       x: getRandomNumber(MIN_LOCATION_X, MAX_LOCATION_X),
-//       y: getRandomNumber(MIN_LOCATION_Y, MAX_LOCATION_Y),
-//     },
-//   };
+// Генерирует объекты
+const fragment = document.createDocumentFragment();
+const cardList = [];
+for (let i = 1; i <= OFFERS_AMOUNT; i++) {
+  const offerOfNearby = {
+    author: {
+      avatar: `img/avatars/user0${i}.png`,
+    },
+    offer: {
+      title: getRandomElement(OFFER_TITLE),
+      address: getRandomElement(OFFER_ADDRESS),
+      price: getRandomNumber(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
+      type: getRandomElement(OFFER_TYPE),
+      rooms: getRandomNumber(1, OFFER_ROOMS.length),
+      guests: getRandomNumber(1, OFFER_GUESTS.length),
+      checkin: getRandomElement(OFFER_CHECKIN),
+      checkout: getRandomElement(OFFER_CHECKOUT),
+      features: getRandomArray(OFFER_FEATURES),
+      description: getRandomElement(OFFER_DESCRIPTION),
+      photos: getRandomArray(OFFER_PHOTOS),
+    },
+    location: {
+      x: getRandomNumber(MIN_LOCATION_X, MAX_LOCATION_X),
+      y: getRandomNumber(MIN_LOCATION_Y, MAX_LOCATION_Y),
+    },
+  };
 
-//   cardList.push(offerOfNearby);
-//   fragment.appendChild(renderPin(offerOfNearby));
-// }
+  cardList.push(offerOfNearby);
+  fragment.appendChild(renderPin(offerOfNearby));
+}
 // fragment.appendChild(renderCard(cardList[0]));
 
 // // Добавляет фрагменты на страницу
@@ -252,7 +252,7 @@ const activatePage = function () {
   for (let i = 0; i < mapFilters.length; i++) {
     mapFilters[i].removeAttribute(`disabled`);
   }
-}
+};
 
 // Объявляет и добавляет обработчики
 const buttonMouseDownHandler = function (evt) {
@@ -295,6 +295,8 @@ const validateTitle = function () {
 
   titleForm.reportValidity();
 };
+
+titleForm.addEventListener(`change`, validateTitle);
 
 // Зависимость количества гостей от количества комнат
 const validateRoomCapacity = function (evt) {
