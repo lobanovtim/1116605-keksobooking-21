@@ -24,8 +24,7 @@ const TYPE_HOUSE_COAST = {
   'house': 5000,
   'palace': 10000
 };
-const OFFER_ROOMS = [1, 2, 3, 4, 5, 6, 7];
-const OFFER_GUESTS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
 const OFFER_CHECKIN = [`12:00`, `13:00`, `14:00`];
 const OFFER_CHECKOUT = [`12:00`, `13:00`, `14:00`];
 const OFFER_FEATURES = [
@@ -64,7 +63,7 @@ const OFFERS_AMOUNT = 8;
 const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
 
-// const pinList = document.querySelector(`.map__pins`);
+const pinList = document.querySelector(`.map__pins`);
 const pinTamplate = document
   .querySelector(`#pin`)
   .content.querySelector(`.map__pin`);
@@ -194,8 +193,8 @@ for (let i = 1; i <= OFFERS_AMOUNT; i++) {
       address: getRandomElement(OFFER_ADDRESS),
       price: getRandomNumber(MIN_OFFER_PRICE, MAX_OFFER_PRICE),
       type: getRandomElement(OFFER_TYPE),
-      rooms: getRandomNumber(1, OFFER_ROOMS.length),
-      guests: getRandomNumber(1, OFFER_GUESTS.length),
+      rooms: getRandomNumber(1, 10),
+      guests: getRandomNumber(1, 10),
       checkin: getRandomElement(OFFER_CHECKIN),
       checkout: getRandomElement(OFFER_CHECKOUT),
       features: getRandomArray(OFFER_FEATURES),
@@ -212,9 +211,6 @@ for (let i = 1; i <= OFFERS_AMOUNT; i++) {
   fragment.appendChild(renderPin(offerOfNearby));
 }
 // fragment.appendChild(renderCard(cardList[0]));
-
-// // Добавляет фрагменты на страницу
-// pinList.appendChild(fragment);
 
 
 // 4.1
@@ -243,6 +239,7 @@ adForm.querySelector(`#address`).setAttribute(`value`, LEFT_MAP_PIN + `, ` + TOP
 
 // Функция активации
 const activatePage = function () {
+  pinList.appendChild(fragment);
   map.classList.remove(`map--faded`);
   adForm.classList.remove(`ad-form--disabled`);
   mapFilters.classList.remove(`ad-form--disabled`);
