@@ -6,7 +6,7 @@
     .content.querySelector(`.map__card`);
 
   const correctWord = function (number, one, two, many) {
-    let n = Math.abs(number) % 100;// Проверка по модулю
+    let n = Math.abs(number) % 100; // Проверка по модулю
     if (n > 4) {
       return many;
     }
