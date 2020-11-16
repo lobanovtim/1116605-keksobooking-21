@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Тимофей Лобанов](https://up.htmlacademy.ru/javascript/21/user/1116605).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Пасунько]{https://htmlacademy.ru/profile/id702351}.
 
 ---
 
