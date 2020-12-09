@@ -22,11 +22,13 @@
   };
 
   const renderPins = (cards) => {
+    window.network.getData(function(cards){
     const fragment = document.createDocumentFragment();
     cards.forEach((item, index) => {
       fragment.appendChild(renderPin(item, index));
     });
     pinList.appendChild(fragment);
+  }, function() {});
   };
 
   // Добавляет/удаляет карточку
@@ -46,8 +48,18 @@
     }
   });
 
+  const removePins = () => {
+    const pins = document.querySelectorAll(`.map__pin`);
+    pins.forEach(function (item) {
+      if (!item.matches(`.map__pin--main`)) {
+        item.remove();
+      }
+    });
+  };
+
   window.pin = {
     renderPins,
+    removePins
   };
 
 })();

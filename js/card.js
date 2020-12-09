@@ -6,7 +6,7 @@
     .content.querySelector(`.map__card`);
 
   const correctWord = function (number, one, two, many) {
-    let n = Math.abs(number) % 100; // Проверка по модулю
+    let n = Math.abs(number) % 100;// Проверка по модулю
     if (n > 4) {
       return many;
     }
@@ -26,6 +26,7 @@
 
   // Создаёт DOM-элементы Card
   const renderCard = function (offerOfNearby) {
+    // window.getData(function(offerOfNearby){
     let cardElement = cardTemplate.cloneNode(true);
 
     cardElement.querySelector(`.popup__title`).textContent =
@@ -33,7 +34,7 @@
     cardElement.querySelector(`.popup__text--address`).textContent =
       offerOfNearby.offer.address;
     cardElement.querySelector(`.popup__text--price`).textContent = `${offerOfNearby.offer.price}₽/ночь`;
-    cardElement.querySelector(`.popup__type`).textContent = window.data.OFFER_TYPE[offerOfNearby.offer.type];
+    cardElement.querySelector(`.popup__type`).textContent = `${offerOfNearby.offer.type}`;
 
     // Меняет окончания слов в зависимости от числа
     const room = offerOfNearby.offer.rooms;
@@ -75,9 +76,18 @@
       cardPhotos.appendChild(newPhotos);
     }
     return cardElement;
+  // }, function() {});
+  };
+
+  const removeCard = () => {
+    const card = document.querySelector(`.map__card`);
+    if (card) {
+      card.remove();
+    }
   };
 
   window.card = {
-    renderCard
+    renderCard,
+    removeCard
   };
 })();

@@ -20,6 +20,10 @@
   const timeOutForm = document.querySelector(`#timeout`);
   const formRoomNumber = adForm.querySelector(`#room_number`);
   const formGuestNumber = adForm.querySelector(`#capacity`);
+  const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+  const successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
+  const main = document.querySelector(`main`);
+  const resetBtn = document.querySelector(`.ad-form__reset`);
 
   const activateForm = function () {
     window.map.map.classList.remove(`map--faded`);
@@ -32,41 +36,61 @@
     for (let i = 0; i < mapFilters.length; i++) {
       mapFilters[i].removeAttribute(`disabled`);
     }
+
+    console.log(new FormData(adForm));
   };
 
-  // Отключает форму
-  for (let i = 0; i < adForm.length; i++) {
-    adForm[i].setAttribute(`disabled`, `disabled`);
-  }
+  const deactivateForm = function () {
+    window.map.map.classList.add(`map--faded`);
+    adForm.classList.add(`ad-form--disabled`);
+    mapFilters.classList.add(`ad-form--disabled`);
 
-  // Отключает фильтры
-  for (let i = 0; i < mapFilters.length; i++) {
-    mapFilters[i].setAttribute(`disabled`, `disabled`);
-  }
+    for (let i = 0; i < adForm.length; i++) {
+      adForm[i].setAttribute(`disabled`);
+    }
+    for (let i = 0; i < mapFilters.length; i++) {
+      mapFilters[i].setAttribute(`disabled`);
+    }
+  };
 
-  // Узнает координаты главной метки
-  const WIDTH_MAIN_PIN = 62;
-  const HEIGHT_MAIN_PIN = 62;
-  const LEFT_MAP_PIN = window.map.mapPin.offsetLeft + WIDTH_MAIN_PIN / 2;
-  const TOP_MAP_PIN = window.map.mapPin.offsetTop + HEIGHT_MAIN_PIN / 2;
-
-  // Записывает данные координат в форму объявления
-  adForm.querySelector(`#address`).setAttribute(`value`, LEFT_MAP_PIN + `, ` + TOP_MAP_PIN);
-
-  // Валидация заголовка
-  const validateTitle = function () {
-    if (titleForm.value.length < titleForm.minLength) {
-      titleForm.setCustomValidity(`Заголовок должен состоять минимум из ${titleForm.minLength} символов`);
-    } else if (titleForm.value.length > titleForm.maxLength) {
-      titleForm.setCustomValidity(`Заголовок не должен превышать ${titleForm.maxLength} символов`);
-    } else {
-      titleForm.setCustomValidity(``);
+  // Включает форму/фильтры
+  const activateFormsItem = function () {
+    for (let i = 0; i < adForm.length; i++) {
+      adForm[i].setAttribute(`disabled`, `disabled`);
     }
 
-    titleForm.reportValidity();
-  };
+    for (let i = 0; i < mapFilters.length; i++) {
+      mapFilters[i].setAttribute(`disabled`, `disabled`);
+    }
+  }
 
-  titleForm.addEventListener(`change`, validateTitle);
+  activateFormsItem();
+
+  const deactivateFormsItem = function () {
+    for (let i = 0; i < adForm.length; i++) {
+      adForm[i].removeAttribute(`disabled`, `disabled`);
+    }
+
+    for (let i = 0; i < mapFilters.length; i++) {
+      mapFilters[i].removeAttribute(`disabled`, `disabled`);
+    }
+  }
+
+
+  // Валидация заголовка
+  // const validateTitle = function () {
+  //   if (titleForm.value.length < titleForm.minLength) {
+  //     titleForm.setCustomValidity(`Заголовок должен состоять минимум из ${titleForm.minLength} символов`);
+  //   } else if (titleForm.value.length > titleForm.maxLength) {
+  //     titleForm.setCustomValidity(`Заголовок не должен превышать ${titleForm.maxLength} символов`);
+  //   } else {
+  //     titleForm.setCustomValidity(``);
+  //   }
+
+  //   titleForm.reportValidity();
+  // };
+
+  // titleForm.addEventListener(`change`, validateTitle);
 
   // Зависимость количества гостей от количества комнат
   const validateRoomCapacity = function (evt) {
@@ -114,7 +138,77 @@
   timeInForm.addEventListener(`change`, validationTime);
   timeOutForm.addEventListener(`change`, validationTime);
 
+  const hideSuccessMessage = (evt) => {
+    evt.preventDefault();
+    const message = main.querySelector(`.success`);
+    main.removeChild(message);
+    document.removeEventListener(`click`, hideSuccessMessage);
+    document.removeEventListener(`keydown`, hideSuccessMessageByEsc);
+  };
+
+  const hideSuccessMessageByEsc = (evt) => {
+    if (evt.key === `Escape`) {
+      hideSuccessMessage(evt);
+    }
+  };
+
+  const hideErrorMessage = (evt) => {
+    evt.preventDefault();
+    const message = main.querySelector(`.error`);
+    main.removeChild(message);
+    document.removeEventListener(`click`, hideErrorMessage);
+    document.removeEventListener(`keydown`, hideErrorMessageByEsc);
+  };
+
+  const hideErrorMessageByEsc = (evt) => {
+    if (evt.key === `Escape`) {
+      hideErrorMessage(evt);
+    }
+  };
+
+  const setSuccessMessage = () => {
+    const successMessage = successTemplate.cloneNode(true);
+    main.appendChild(successMessage);
+    document.addEventListener(`click`, hideSuccessMessage);
+    document.addEventListener(`keydown`, hideSuccessMessageByEsc);
+    // Сбросить форму
+    // Вернуть mainPin
+  };
+
+  resetBtn.addEventListener(`click`, () => {
+    adForm.reset();
+    mapFilters.reset();
+    // Сбросить форму
+    // Вернуть mainPin
+  });
+
+  const setErrorMessage = () => {
+    const errorMessage = errorTemplate.cloneNode(true);
+    main.appendChild(errorMessage);
+    document.addEventListener(`click`, hideErrorMessage);
+    document.addEventListener(`keydown`, hideErrorMessageByEsc);
+    const btnErr = document.querySelector(`.error__button`);
+    btnErr.addEventListener(`click`, hideErrorMessage);
+  };
+
+  adForm.addEventListener(`submit`, (evt) => {
+    // debugger
+    const formData = new FormData(adForm);
+    console.log(formData)
+    window.network.sendData(formData, () => {
+      window.pin.removePins();
+      window.card.removeCard();
+      adForm.reset();
+      resetPrice();
+      window.pin.resetPinMain();
+      setSuccessMessage();
+    }, setErrorMessage);
+    evt.preventDefault();
+  });
+
   window.form = {
-    activateForm
+    activateForm,
+    deactivateForm,
+    deactivateFormsItem
   };
 })();

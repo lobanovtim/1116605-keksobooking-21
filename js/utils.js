@@ -24,10 +24,12 @@
     return newArray;
   };
 
+
+
   window.utils = {
     getRandomNumber,
     getRandomElement,
-    getRandomArray
+    getRandomArray,
   };
 
 })();
